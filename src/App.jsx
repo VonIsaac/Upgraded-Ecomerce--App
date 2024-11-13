@@ -1,12 +1,31 @@
-
+import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import FrontPage from './components/FrontPage';
+import Products from './components/Products';
 import './App.css'
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Navigate to={'/front-page'} /> 
+    },
+
+    {
+      path: '/front-page',
+      element: <FrontPage />,
+      
+    },
+    {
+      path: '/products',
+      element: <Products />
+    }
+
+
+  ])
+
 
   return (
-    <h1 className=" text-3xl text-blue-700 font-bold ">
-    Hello world!
-  </h1>
+      <RouterProvider router={router} />
   )
 }
 

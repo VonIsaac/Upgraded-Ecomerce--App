@@ -1,0 +1,19 @@
+{
+  "name": "ecomerce-web-app",
+  "version": "1.0.0",
+  "description": "building this full stack app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Von Isaac Baban",
+  "license": "ISC",
+  "dependencies": {
+    "ecomerce-web-app": "file:",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
