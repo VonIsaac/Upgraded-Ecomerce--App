@@ -2,6 +2,7 @@ import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom'
 import FrontPage from './components/FrontPage';
 import Products from './components/Products';
 import './App.css'
+//import Modal from './components/UI/Modal';
 
 function App() {
   const router = createBrowserRouter([
@@ -17,7 +18,8 @@ function App() {
     },
     {
       path: '/products',
-      element: <Products />
+      element: <Products />,
+      
     }
 
 
