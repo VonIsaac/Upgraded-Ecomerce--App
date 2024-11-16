@@ -1,14 +1,31 @@
-const http = require('http');
-
+const path = require('path')
 const express = require('express')
-
+const sequelize = require('./util/databases')
+const dotenv = require('dotenv')
 const app = express()
 
-app.use((req, res, next) => {
-    console.log('HELLO EXPRESS AGAIn')
-})
+// set the dotenv 
+dotenv.config()
 
-const server = http.createServer(app)
+//set the port 
+const PORT = process.env.PORT || 3306
+
+app.use(express.json()); // Parses incoming JSON requests
+app.use(express.urlencoded({ extended: false })); // Parses form-urlencoded requests
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 
-server.listen(3308);
+// call the routes 
+
+sequelize
+.sync()
+.then((result) => {
+    console.log(result)
+    app.listen(PORT, () => {
+        console.log(`Server is running on ${PORT}`)
+    });
+}).catch((err) => {
+    console.log(err)
+});
+
