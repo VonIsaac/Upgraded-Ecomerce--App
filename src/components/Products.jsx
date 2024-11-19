@@ -40,7 +40,7 @@ const Products = () => {
                       <path
                         d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                     </svg>
-                    <input type="text" className="grow" placeholder="Title"  id="title"/>
+                    <input type="text" className="grow" placeholder="Title" name = "title"  id="title"/>
                   </label>
 
                   <label className="input input-bordered flex items-center gap-2 mb-5">
@@ -52,7 +52,7 @@ const Products = () => {
                       <path
                         d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                     </svg>
-                    <input type="text" className="grow" placeholder="ImageUrl" id="imageUrl" />
+                    <input type="text" className="grow" placeholder="ImageUrl" name="imageUrl" id="imageUrl" />
                   </label>
                   
                   
@@ -65,10 +65,10 @@ const Products = () => {
                       <path
                         d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                     </svg>
-                    <input type="number" className="grow" placeholder="Price" id="price" />
+                    <input type="number" className="grow" placeholder="Price" name="price" id="price" />
                   </label>
                   
-                  <textarea className="textarea textarea-bordered mb-5" placeholder="Description" id="description"></textarea>
+                  <textarea className="textarea textarea-bordered mb-5" placeholder="Description" name="description" id="description"></textarea>
                 </Modal>
 
                 <h1 className="text-5xl font-bold  text-center tracking-wide mt-6 mb-10">Our Products</h1>
