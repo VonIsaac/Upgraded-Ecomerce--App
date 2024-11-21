@@ -33,6 +33,19 @@ app.use((req, res, next) => {
     );
     next();
   });
+
+
+  // creating a user
+
+  app.use((req, res, next) => {
+    User.findByPk(1)
+    .then((user) => {
+      req.user = user
+      next()
+    }).catch(err => {
+      console.log(err)
+    })
+  })
   
 
 app.use(express.json()); // Parses incoming JSON requests
@@ -55,6 +68,19 @@ User.hasMany(Product) // one to many
 sequelize
 .sync({force: true})
 //.sync()
+.then((result) => {
+  console.log(result)
+  //check if wee have a one id 
+  return User.findByPk(1)
+})
+.then(user => {
+  // check if wee not have a user
+  if(!user){
+    return User.create({name: 'Von', email: 'vonbaban1@gmail.com'})
+  };
+
+  return user
+}) 
 .then((result) => {
     console.log(result)
     app.listen(PORT, () => {

@@ -6,7 +6,7 @@ exports.postProducts = (req, res, next) => {
     const imageUrl = req.body.imageUrl
     const price = req.body.price;
     const description = req.body.description;
-   Product.create({
+   req.user.createProducts({ // one to many
         title: title,
         imageUrl: imageUrl,
         price: price,
@@ -14,7 +14,17 @@ exports.postProducts = (req, res, next) => {
    })
    .then((result) => {
         console.log(result)
+        // Respond with the created product
+        res.status(201).json({
+            message: 'Product created successfully',
+            product: result,
+        });
    }).catch((err) => {
         console.log(err)
+          // Respond with an error message
+          res.status(500).json({
+               message: 'Failed to create product',
+               error: err,
+           });
    });
 }
