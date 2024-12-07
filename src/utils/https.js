@@ -34,9 +34,9 @@ export async function postProducts(productData){
 }
 
 // get all products data
-export async function getAllProducts(){
+export async function getAllProducts({signal}){
     try{
-        const response = await  fetch('http://localhost:3000/products');
+        const response = await  fetch('http://localhost:3000/products', {signal});
         
 
         if(!response.ok){
@@ -55,7 +55,7 @@ export async function getAllProducts(){
 }
 
 // get id of every product
-export async function getIdProducts(id, signal){
+export async function getIdProducts({id, signal}){
     try{
         const response = await fetch(`http://localhost:3000/products/${id}`, {signal})
 

@@ -3,10 +3,52 @@ import Header from "./UI/Header";
 import { dummyProducts } from "../utils/products";
 import Modal from "./UI/Modal";
 import { Outlet } from "react-router-dom";
-
+import { useQuery } from "@tanstack/react-query";
+import Loading from "./UI/Loading";
+import { getAllProducts } from "../utils/https";
+import ErrorBlock from "./UI/Error";
+import Footer from "./UI/Footer";
 const Products = () => {
 
-  
+  const {data, isPending, isError} = useQuery({
+    queryKey: ['get-products'],
+    queryFn: ({signal}) => getAllProducts({signal})
+  })
+
+  let content;
+
+  if(isPending){
+    content = <Loading />
+  }
+
+  if(isError){
+    content = <ErrorBlock  title="An error occurred" message= 'Failed to fetch events' />
+  }
+
+  if(data){
+    content = (
+      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+        {data.product.map((product) => (
+          <li key={product.id} className="card bg-base-100 w-96 shadow-xl ">
+            <figure>
+              <img
+                src={product.imageUrl}
+                alt={product.title}
+              />
+            </figure>
+            <div className="card-body">
+              <h2 className="card-title uppercase text-2xl tracking-wide font-extrabold">{product.title}</h2>
+              <p className="tracking-wide">₱{product.price}</p>
+              <div className="card-actions justify-end">
+                <button className="btn btn-primary">Add to Cart</button>
+                <button className="btn btn-neutral">Details</button>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    );
+  }
 
     return(
       <>
@@ -17,25 +59,22 @@ const Products = () => {
         <main className="bg-base-200">
             <div className="hero bg-base-200 min-h-screen">
                     <div className="hero-content flex-col lg:flex-row">
-                        <img
-                        src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-                        className="max-w-sm rounded-lg shadow-2xl" />
+              
                         <div>
-                            <h1 className="text-5xl font-bold">Box Office News!</h1>
-                            <p className="py-6">
-                                Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-                                quasi. In deleniti eaque aut repudiandae et a id nisi.
+                            <h1 className="text-[85px] font-bold tracking-wide">SnapBuy</h1>
+                            <p className="py-6 tracking-wide leading-relaxed font-bold text-lg">
+                              With SnapBuy, you can find premium goods at affordable costs,
+                              whether you&apos;re searching for the newest technology, stylish clothing, or daily necessities. 
+                              Additionally, shopping has never been easier or safer thanks to lightning-fast checkout and safe payment methods.
                             </p>
-                            <button className="btn btn-primary">Get Started</button>
+                            <Modal />
                         </div>
                     </div>
             </div>
 
             <section >
-                <Modal />
-          
                 <h1 className="text-5xl font-bold  text-center tracking-wide mt-6 mb-10">Our Products</h1>
-                <ul className="flex flex-wrap justify-center gap-12 mt-5 mb-[200px]">
+                <ul className="flex flex-wrap justify-center gap-12 mt-5 mb-[50px]">
                   {dummyProducts.map((product, index) => (
                     <li key={index} className="card bg-base-100 w-72 h-[28rem] mb-12 shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
                         <figure>
@@ -57,13 +96,13 @@ const Products = () => {
                 </ul>
 
                   {/* this line display the data that wee add */}
-                  <div>
-                    
-                   
+                  <div className=" m-10 mb-16">  
+                    {content}
                   </div>
             </section>
             
         </main>
+        <Footer />
         <Outlet />
       </>
         

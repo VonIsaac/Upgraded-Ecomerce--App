@@ -6,9 +6,7 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        'regal-blue': '#243c5a',
-      },
+      
     },
   },
   plugins: [require('daisyui')],
