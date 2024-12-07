@@ -2,9 +2,24 @@
 const Product = require('../models/product');
  
 
-/*exports.getProducts = (req, res, next) => {
+exports.getProducts = (req, res, next) => {
 
-}*/
+Product.findAll()
+.then((product) => {
+    res.status(201).json({
+        message: 'Product created successfully',
+        product: product,
+    });
+})
+.catch(err => {
+    console.error('Error details:', err);
+    res.status(500).json({
+        message: 'Failed to create product',
+        error: err.message, // Include the error message in the response
+    });
+}) 
+
+}
 
 exports.getIndexProducts = (req, res, next) => {
     //use and id 
