@@ -42,7 +42,7 @@ const Modal = () => {
         // /cancels the event if it is cancelable,
         e.preventDefault();
         mutate(formData)
-        navigate('../')
+        navigate('/admin')
     }
 
     return(

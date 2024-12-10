@@ -3,6 +3,8 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import {queryClient} from './utils/https'
 import FrontPage from './components/FrontPage';
 import Products from './components/Products';
+import Admin from './components/Admin';
+import Detail from './components/Detail';
 import './App.css'
 //import Modal from './components/UI/Modal';
 
@@ -21,9 +23,18 @@ function App() {
     {
       path: '/products',
       element: <Products />,
-      
+      children: [
+        {
+          index: true,
+          path: ':id',
+          element: <Detail />
+        }
+      ]
+    },
+    {
+      path: '/admin',
+      element: <Admin />
     }
-
 
   ])
 

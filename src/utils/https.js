@@ -1,9 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
 
-export const queryClient = new QueryClient()
+ const queryClient = new QueryClient()
 
-// for post an image 
-export async function postProducts(productData){
+// for post a data product
+ async function postProducts(productData){
     try{
         const response = await fetch('http://localhost:3000/add-products', {
             method: 'POST',
@@ -34,7 +34,7 @@ export async function postProducts(productData){
 }
 
 // get all products data
-export async function getAllProducts({signal}){
+ async function getAllProducts({signal}){
     try{
         const response = await  fetch('http://localhost:3000/products', {signal});
         
@@ -55,7 +55,7 @@ export async function getAllProducts({signal}){
 }
 
 // get id of every product
-export async function getIdProducts({id, signal}){
+ async function getIdProducts({id, signal}){
     try{
         const response = await fetch(`http://localhost:3000/products/${id}`, {signal})
 
@@ -73,3 +73,10 @@ export async function getIdProducts({id, signal}){
         console.log(err)
     }
 }
+
+export{
+    postProducts, 
+    getAllProducts, 
+    getIdProducts,
+    queryClient
+} 

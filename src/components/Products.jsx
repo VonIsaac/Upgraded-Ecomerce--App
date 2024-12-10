@@ -2,17 +2,19 @@
 import Header from "./UI/Header";
 import { dummyProducts } from "../utils/products";
 import Modal from "./UI/Modal";
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./UI/Loading";
 import { getAllProducts } from "../utils/https";
 import ErrorBlock from "./UI/Error";
 import Footer from "./UI/Footer";
+
 const Products = () => {
 
   const {data, isPending, isError} = useQuery({
     queryKey: ['get-products'],
-    queryFn: ({signal}) => getAllProducts({signal})
+    queryFn: ({signal}) => getAllProducts({signal}),
+    onSuccess: (data) => console.log("Fetched data:", data),
   })
 
   let content;
@@ -25,7 +27,7 @@ const Products = () => {
     content = <ErrorBlock  title="An error occurred" message= 'Failed to fetch events' />
   }
 
-  if(data){
+  if(data && data.product){
     content = (
       <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
         {data.product.map((product) => (
@@ -41,7 +43,9 @@ const Products = () => {
               <p className="tracking-wide">₱{product.price}</p>
               <div className="card-actions justify-end">
                 <button className="btn btn-primary">Add to Cart</button>
-                <button className="btn btn-neutral">Details</button>
+                <Link to={`/products/${product.id}`} className="btn btn-neutral" onClick={()=>document.getElementById('my_modal_2').showModal()}>
+                  Details
+                </Link>
               </div>
             </div>
           </li>
@@ -50,8 +54,10 @@ const Products = () => {
     );
   }
 
+  const modal = <Modal />
     return(
       <>
+      
         <header className=" m-3 flex justify-center items-center ">
             <Header />
         </header>
@@ -67,7 +73,7 @@ const Products = () => {
                               whether you&apos;re searching for the newest technology, stylish clothing, or daily necessities. 
                               Additionally, shopping has never been easier or safer thanks to lightning-fast checkout and safe payment methods.
                             </p>
-                            <Modal />
+                            {modal}
                         </div>
                     </div>
             </div>
