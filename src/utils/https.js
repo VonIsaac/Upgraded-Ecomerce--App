@@ -96,7 +96,7 @@ async function deleteProducts({id}){
 
 async function getEditProducts({ productId }) {
     try {
-        const response = await fetch(`http://localhost:3000/edit-products/${productId}`);
+        const response = await fetch(`http://localhost:3000/edit-products/${productId}?edit=true`);
         if (!response.ok) {
             const error = new Error('An error occurred while fetching the product');
             error.code = response.status;
@@ -119,12 +119,7 @@ async function editProducts({ productId, updatedProduct }) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                title: updatedProduct.title,
-                imageUrl: updatedProduct.imageUrl,
-                price: updatedProduct.price,
-                description: updatedProduct.description
-            })
+            body: JSON.stringify(updatedProduct)
         });
 
         if (!response.ok) {

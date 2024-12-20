@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { queryClient, editProducts, getEditProducts } from "../../utils/https";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -12,12 +12,12 @@ const EditModal = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    const searchEdit = searchParams.get('edit') === 'true';
+    //const searchEdit = searchParams.get('edit') === 'true';
 
     const { data: productData } = useQuery({
         queryKey: ['edit-product', productId],
         queryFn: () => getEditProducts({ productId }),
-        enabled: searchEdit,
+      //  enabled: searchEdit,
         onSuccess: (data) => {
             setTitle(data.title);
             setImageUrl(data.imageUrl);
@@ -30,7 +30,7 @@ const EditModal = () => {
         mutationFn: (updatedProduct) => editProducts({ productId, updatedProduct }),
         onSuccess: () => {
             queryClient.invalidateQueries(['edit-products']);
-            navigate('/products');
+           
         },
         onError: (error) => {
             console.error('Error editing product:', error);
@@ -40,6 +40,7 @@ const EditModal = () => {
     const handleEditProduct = (e) => {
         e.preventDefault();
         mutate({ title, imageUrl, price, description });
+        navigate('/products');
     };
 
     return (
@@ -54,7 +55,7 @@ const EditModal = () => {
                         name="title"
                         id="title"
                         onChange={e => setTitle(e.target.value)}
-                        value={productData?.title || title}
+                        value={ title}
                         required
                     />
                 </label>
@@ -66,7 +67,7 @@ const EditModal = () => {
                         name="imageUrl"
                         id="imageUrl"
                         onChange={e => setImageUrl(e.target.value)}
-                        value={productData?.imageUrl || imageUrl}
+                        value={ imageUrl}
                         required
                     />
                 </label>
@@ -78,7 +79,7 @@ const EditModal = () => {
                         name="price"
                         id="price"
                         onChange={e => setPrice(e.target.value)}
-                        value={productData?.price || price}
+                        value={ price}
                         required
                     />
                 </label>
@@ -89,7 +90,7 @@ const EditModal = () => {
                     id="description"
                     required
                     onChange={e => setDescription(e.target.value)}
-                    value={productData?.description || description}
+                    value={ description}
                 />
                 <button className="btn btn-block" type="submit">UPDATE PRODUCT</button>
             </form>
