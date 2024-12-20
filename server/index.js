@@ -36,8 +36,9 @@ app.use((req, res, next) => {
         req.user = user; // Attach the Sequelize User instance to req
         next();
     } catch (error) {
-        console.error('Error fetching user:', error);
-        next(error);
+      console.error('Error fetching user:', error);
+      // Added return to ensure only one response is sent
+      return res.status(500).json({ message: 'Internal server error.' });
     }
 });
   

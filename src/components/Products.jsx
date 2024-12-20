@@ -2,7 +2,7 @@
 import Header from "./UI/Header";
 import { dummyProducts } from "../utils/products";
 import Modal from "./UI/Modal";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link,  } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "./UI/Loading";
 import { getAllProducts } from "../utils/https";

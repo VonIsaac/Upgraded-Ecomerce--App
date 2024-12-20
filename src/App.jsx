@@ -5,6 +5,7 @@ import FrontPage from './components/FrontPage';
 import Products from './components/Products';
 import Admin from './components/Admin';
 import Detail from './components/Detail';
+import EditModal from './components/UI/EditModal';
 import './App.css'
 //import Modal from './components/UI/Modal';
 
@@ -20,6 +21,7 @@ function App() {
       element: <FrontPage />,
       
     },
+
     {
       path: '/products',
       element: <Products />,
@@ -33,16 +35,24 @@ function App() {
     },
     {
       path: '/admin',
-      element: <Admin />
+      element: <Admin />,
+      children: [
+        {
+          path: '/admin/:productId',
+          element: <EditModal />
+        }
+      ]
     }
 
   ])
 
 
   return (
-     <QueryClientProvider client={queryClient}>
-       <RouterProvider router={router} />
-     </QueryClientProvider>
+   
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+        </QueryClientProvider>
+     
   )
 }
 
