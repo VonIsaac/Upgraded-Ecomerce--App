@@ -7,6 +7,8 @@ const app = express();
 // Call the models
 const Product = require('./models/product');
 const User = require('./models/users');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
 
 // Call the routes
 const errorController = require('./controllers/error');
@@ -55,9 +57,13 @@ app.use(shopRoutes)
 
 app.use(errorController.get404);
 
-// creat one to many relation 
-User.hasMany(Product, { foreignKey: 'userId', as: 'products' });
-Product.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+// creat relation  association
+User.hasMany(Product, { foreignKey: 'userId', as: 'products' }); // one to many
+Product.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
+User.hasOne(Cart, { foreignKey: 'userId', as: 'cart' }); // one to one
+Cart.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
+Cart.belongsToMany(Product, { through: CartItem }); // many to many
+Product.belongsToMany(Cart, { through: CartItem }); // many to many
 
 sequelize
 //.sync({force: true})
