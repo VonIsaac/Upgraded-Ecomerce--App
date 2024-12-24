@@ -48,6 +48,10 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json()); // Parses incoming JSON requests
 app.use(express.urlencoded({ extended: false })); // Parses form-urlencoded requests
 //app.use(express.static(path.join(__dirname, 'public')));
+ // Handle React routing, return all requests to React's index.html
+/*app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});*/
 
 
 // use the routes 
@@ -81,11 +85,15 @@ sequelize
 
   return user
 }) 
-.then((result) => {
-    console.log(result)
-    app.listen(PORT, () => {
-        console.log(`Server is running on ${PORT}`)
-    });
+.then((user) => {
+    console.log(user)
+    // wee creat a user cart because the user have a cart then wee can add products to the cart
+    return user.createCart();  // Create a cart for the user, one-to-one relationship
+})
+.then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`)
+});
 }).catch((err) => {
     console.log(err)
 });

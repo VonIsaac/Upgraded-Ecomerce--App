@@ -6,6 +6,7 @@ import Products from './components/Products';
 import Admin from './components/Admin';
 import Detail from './components/Detail';
 import EditModal from './components/UI/EditModal';
+import Cart from './components/Cart';
 import './App.css'
 //import Modal from './components/UI/Modal';
 
@@ -42,6 +43,12 @@ function App() {
           element: <EditModal />
         }
       ]
+    },
+
+    {
+      path: '/cart',
+      element: <Cart />,
+
     }
 
   ])

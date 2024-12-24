@@ -94,6 +94,7 @@ async function deleteProducts({id}){
     }
 }
 
+// getting the data of a product to be edit
 async function getEditProducts({ productId }) {
     try {
         const response = await fetch(`http://localhost:3000/edit-products/${productId}?edit=true`);
@@ -112,6 +113,8 @@ async function getEditProducts({ productId }) {
     }
 }
 
+
+// edit the product
 async function editProducts({ productId, updatedProduct }) {
     try {
         const response = await fetch(`http://localhost:3000/edit-products/${productId}`, {

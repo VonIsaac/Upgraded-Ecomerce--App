@@ -12,12 +12,12 @@ const EditModal = () => {
     const [imageUrl, setImageUrl] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    //const searchEdit = searchParams.get('edit') === 'true';
+    const searchEdit = searchParams.get('edit') === 'true';
 
     const { data: productData } = useQuery({
         queryKey: ['edit-product', productId],
         queryFn: () => getEditProducts({ productId }),
-      //  enabled: searchEdit,
+       enabled: searchEdit,
         onSuccess: (data) => {
             setTitle(data.title);
             setImageUrl(data.imageUrl);
@@ -26,7 +26,7 @@ const EditModal = () => {
         }
     });
 
-    const { mutate } = useMutation({
+    const { mutate, isPending } = useMutation({
         mutationFn: (updatedProduct) => editProducts({ productId, updatedProduct }),
         onSuccess: () => {
             queryClient.invalidateQueries(['edit-products']);
@@ -55,7 +55,7 @@ const EditModal = () => {
                         name="title"
                         id="title"
                         onChange={e => setTitle(e.target.value)}
-                        value={ title}
+                        value={ title }
                         required
                     />
                 </label>
@@ -67,7 +67,7 @@ const EditModal = () => {
                         name="imageUrl"
                         id="imageUrl"
                         onChange={e => setImageUrl(e.target.value)}
-                        value={ imageUrl}
+                        value={ imageUrl  }
                         required
                     />
                 </label>
@@ -79,7 +79,7 @@ const EditModal = () => {
                         name="price"
                         id="price"
                         onChange={e => setPrice(e.target.value)}
-                        value={ price}
+                        value={ price  }
                         required
                     />
                 </label>
@@ -90,9 +90,11 @@ const EditModal = () => {
                     id="description"
                     required
                     onChange={e => setDescription(e.target.value)}
-                    value={ description}
+                    value={ description }
                 />
-                <button className="btn btn-block" type="submit">UPDATE PRODUCT</button>
+                <button className="btn btn-block" type="submit">
+                    {isPending ? 'Updating Products....' : 'Update Product'}
+                </button>
             </form>
         </dialog>
     );
