@@ -140,6 +140,55 @@ async function editProducts({ productId, updatedProduct }) {
     }
 }
 
+// handle to post to data to cart 
+async function postCart({productId}){
+    try{
+        const response = await fetch(`http://localhost:3000/cart/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productId: productId
+            })
+        });
+
+        if (!response.ok) {
+            const error = new Error('An error occurred while adding the product to the cart');
+            error.code = response.status;
+            error.info = await response.json();
+            throw error;
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }catch(err){
+        console.log(err)
+        
+    }
+}
+
+// get the data when post to cart
+async function getCart(){
+    try{
+        const response = await fetch('http://localhost:3000/cart');
+        
+        if(!response.ok){
+            const error = new Error('An error occurred while fetching the event');
+            error.code = response.status;
+            error.info = await response.json();
+            throw error;
+        }
+        
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }catch(err){
+        console.log(err)
+    }
+}
+
 export{
     postProducts, 
     getAllProducts, 
@@ -147,4 +196,6 @@ export{
     deleteProducts,
     getEditProducts,
     editProducts,
+    postCart,
+    getCart
 } 
