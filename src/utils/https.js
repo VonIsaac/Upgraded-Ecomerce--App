@@ -141,16 +141,14 @@ async function editProducts({ productId, updatedProduct }) {
 }
 
 // handle to post to data to cart 
-async function postCart({productId}){
-    try{
-        const response = await fetch(`http://localhost:3000/cart/${productId}`, {
+async function postCart(productId) {
+    try {
+        const response = await fetch('http://localhost:3000/cart', productId, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                productId: productId
-            })
+            body: JSON.stringify( productId ), // Sending productId in the body
         });
 
         if (!response.ok) {
@@ -161,11 +159,10 @@ async function postCart({productId}){
         }
 
         const data = await response.json();
-        console.log(data);
+        console.log('Product added to cart:', data);
         return data;
-    }catch(err){
-        console.log(err)
-        
+    } catch (err) {
+        console.error('Error adding product to cart:', err);
     }
 }
 

@@ -2,14 +2,43 @@
 import Header from "./UI/Header";
 import { dummyProducts } from "../utils/products";
 import Modal from "./UI/Modal";
-import { Outlet, Link,  } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { Outlet, Link, useParams, useNavigate  } from "react-router-dom";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Loading from "./UI/Loading";
-import { getAllProducts } from "../utils/https";
+import { getAllProducts, postCart, queryClient } from "../utils/https";
 import ErrorBlock from "./UI/Error";
 import Footer from "./UI/Footer";
 
+
+
 const Products = () => {
+  // handle to add product to the cart
+
+  const { productId } = useParams();
+  //const navigate = useNavigate();
+
+  const { mutate: postAddToCart, isLoading: postCartPending } = useMutation({
+    mutationFn: postCart,
+    onSuccess: () => {
+      alert('Product added to cart');
+      queryClient.invalidateQueries({
+        queryKey: ['post-cart'],
+      });                                     
+      
+    },
+    onError: (error) => {
+      alert('Failed to add product to cart');
+      console.error('Error adding product to cart:', error);
+    },
+});
+
+
+const handleAddToCart = () => {
+  console.log('Adding to cart:', productId);
+  console.error('Error adding product to cart:', productId);
+  postAddToCart({productId } ); // Pass the productId as expected by postCart
+};
+
 
   const {data, isPending, isError} = useQuery({
     queryKey: ['get-products'],
@@ -42,7 +71,9 @@ const Products = () => {
               <h2 className="card-title uppercase text-2xl tracking-wide font-extrabold">{product.title}</h2>
               <p className="tracking-wide">₱{product.price}</p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Add to Cart</button>
+                <button className="btn btn-primary" onClick={handleAddToCart}>
+                  {postCartPending ? 'Adding to cart...' : 'Add to cart'}
+                </button>
                 <Link to={`/products/${product.id}`} className="btn btn-neutral" onClick={()=>document.getElementById('my_modal_2').showModal()}>
                   Details
                 </Link>

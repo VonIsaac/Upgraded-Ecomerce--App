@@ -47,6 +47,10 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.json()); // Parses incoming JSON requests
 app.use(express.urlencoded({ extended: false })); // Parses form-urlencoded requests
+
+
+
+
 //app.use(express.static(path.join(__dirname, 'public')));
  // Handle React routing, return all requests to React's index.html
 /*app.get('*', (req, res) => {
@@ -62,16 +66,17 @@ app.use(shopRoutes)
 app.use(errorController.get404);
 
 // creat relation  association
-User.hasMany(Product, { foreignKey: 'userId', as: 'products' }); // one to many
+User.hasMany(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: 'userId', as: 'products' }); // one to many
 Product.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
 User.hasOne(Cart, { foreignKey: 'userId', as: 'cart' }); // one to one
 Cart.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
-Cart.belongsToMany(Product, { through: CartItem }); // many to many
-Product.belongsToMany(Cart, { through: CartItem }); // many to many
+Cart.belongsToMany(Product, { through: CartItem, as: 'produktos' }); // Note the alias 'products'
+Product.belongsToMany(Cart, { through: CartItem, as: 'carts' }); // Alias to ensure relationship awareness
 
 sequelize
 //.sync({force: true})
 .sync()
+//.sync({ alter: true })
 .then((result) => {
   console.log('Database synced successfully', result);
   //check if wee have a one id 
