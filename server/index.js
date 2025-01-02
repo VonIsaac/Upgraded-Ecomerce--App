@@ -66,12 +66,12 @@ app.use(shopRoutes)
 app.use(errorController.get404);
 
 // creat relation  association
-User.hasMany(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: 'userId', as: 'products' }); // one to many
+User.hasMany(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: 'userId', as: 'produktos' }); // one to many
 Product.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
 User.hasOne(Cart, { foreignKey: 'userId', as: 'cart' }); // one to one
 Cart.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
 Cart.belongsToMany(Product, { through: CartItem, as: 'produktos' }); // Note the alias 'products'
-Product.belongsToMany(Cart, { through: CartItem, as: 'carts' }); // Alias to ensure relationship awareness
+Product.belongsToMany(Cart, { through: CartItem, as: 'cart' }); // Alias to ensure relationship awareness
 
 sequelize
 //.sync({force: true})
@@ -102,5 +102,3 @@ sequelize
 }).catch((err) => {
     console.log(err)
 });
-
-

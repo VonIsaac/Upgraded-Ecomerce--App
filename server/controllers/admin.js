@@ -8,19 +8,13 @@ const Product = require("../models/product");
 exports.postProducts = (req, res, next) => {
      const { title, imageUrl, price, description } = req.body;
 
-     //check if wee have request
-     /*if(!req.user){
-          return res.status(400).json({
-               message: 'No user associated with the request. Please ensure a user exists.',
-          })
-     }*/
      //check if wee have an and title, image etc...
      if(!title || !imageUrl || !price || !description){
           return res.status(400).json({
                message: 'All fields (title, imageUrl, price, description) are required.',
            });
      }
-     req.user.createProduct({
+     req.user.createProdukto({ // one to many relationship
           title: title,
           price: price,
           imageUrl: imageUrl,

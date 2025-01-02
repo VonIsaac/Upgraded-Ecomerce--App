@@ -13,10 +13,10 @@ const Cart = () => {
     })
 
     let content; 
-    if(data && data.cart){
+    if(data && data.carts){
         content = (
             <ul  className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-               {data.cart.map((cart) => (
+               {data.carts.map((cart) => (
                     <li key={cart.id} className="card bg-base-100 w-96 shadow-xl">
                     <figure className="px-10 pt-10">
                       <img

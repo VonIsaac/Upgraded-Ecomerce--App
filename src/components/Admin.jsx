@@ -73,7 +73,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {data.product.map((product) => (
+                  {data.map((product) => (
                     <tr key={product.id}>
                       <td>{product.title}</td>
                       <td>{product.price}</td>

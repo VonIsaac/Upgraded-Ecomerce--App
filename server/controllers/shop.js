@@ -1,14 +1,12 @@
 
+
 const Product = require('../models/product');
  
 // get all products
 exports.getProducts = (req, res, next) => {
 Product.findAll()
 .then((product) => {
-    res.status(201).json({
-        message: 'Product created successfully',
-        product: product,
-    });
+    res.status(201).json( product);
 })
 .catch(err => {
     console.error('Error details:', err);
@@ -43,34 +41,11 @@ exports.getIndexProducts = (req, res, next) => {
    });
 }
 
-// to get the cart from the user data
-exports.getCart = (req, res) => {
-    req.user.getCart()
-      .then((cart) => {
-        if (!cart) {
-          // If no cart exists, handle it (e.g., create a new cart or send an error response)
-          res.status(404).json({ message: 'Cart not found' });
-          return null; // To stop further execution
-        }
-        // Fetch all products associated with this cart
-        return cart.getProduktos(); // This uses the alias 'products' defined in the association
-      })
-      .then((products) => {
-        
-        // Send the products in the response
-        res.status(200).json({ cart: products });
-      })
-      .catch((err) => {
-        console.error('Error fetching cart:', err);
-        res.status(500).json({ message: 'Failed to fetch cart', error: err });
-      });
-  };
-
-  /*exports.getCart = (req, res, next) => {
+ /* exports.getCart = (req, res, next) => {
     req.user.getCart() // one to one relationship 
     .then((cart) => {
         console.log(cart)
-        return cart.getProducts() // Get all products in the cart, many-to-many relationship
+        return cart.getProduktos() // Get all products in the cart, many-to-many relationship
         // wee need to nested .then() because wee need to get the products from the cart
         .then((products) => {
             console.log(products)
@@ -88,12 +63,44 @@ exports.getCart = (req, res) => {
     });
 }*/
 
-  
+    
+// to get the cart from the user data
+exports.getCart = (req, res) => {
+    //const {productId} = req.body;
+    //console.log(req.user.cart)
+    req.user.getCart() // one to one relationship
+      .then((cart) => {
+        console.log('i got a cart maybe?',cart)
+        if (!cart) {
+          // If no cart exists, handle it (e.g., create a new cart or send an error response)
+          res.status(404).json({ message: 'Cart not found' });
+         return null; // To stop further execution
+        }
+        // Fetch all products associated with this cart
+        console.log('Cart found:', cart.id);
+        return cart.getProduktos() // This uses the alias 'products' defined in the association, many-to-many relationship
+        .then(produktos => {
+            console.log('Fetched products in cart:', produktos);
+            // Send the products in the response
+           return res.status(200).json({
+                cosole: console.log('i got product??', produktos),
+                message: 'Cart fetched successfully',
+                carts: produktos
+            });
+          })
+      })
+      .catch((err) => {
+        console.error('Error fetching cart:', err);
+        res.status(500).json({ message: 'Failed to fetch cart', error: err });
+      });
+  };
+
   
 //post a product to the cart
-exports.postCart = (req, res, next) => {
-    // get the product id
-    const { productId } = req.body; // Accessing data from the body
+exports.postCart = (req, res) => {
+    // get the product id 
+    const {productId} = req.body; // Accessing data from the body
+   // console.log('Product ID received:', productId); 
     let newQuantity = 1; // default quantity because we are adding a new product to the cart
     let fetchedCart; // variable to store the cart data
 
@@ -107,12 +114,12 @@ exports.postCart = (req, res, next) => {
         //wee use id in getPorducts because wee need to get the product in the cart
         return cart.getProduktos({where: {id:  productId}}) // Get the product in the cart, many-to-many relationship
     })
-    .then(products => {
-        console.log(products)
+    .then(produktos => {
+        console.log(produktos)
         // this line is to handle the quantity of the product in the cart
         let product;
-        if(products.length > 0 ){ // if the product is in the cart is greater than 0 
-            product = products[0] // the value of product is the first product in the cart
+        if(produktos.length > 0 ){ // if the product is in the cart is greater than 0 
+            product = produktos[0] // the value of product is the first product in the cart
         }
 
         // if wee have a product in the cart wee need to increase the quantity
@@ -127,12 +134,13 @@ exports.postCart = (req, res, next) => {
     .then((product) => {
         console.log(product)
         // wee return fetchedCart bacause to  add a product to the cart or update the quantity of an existing product in the cart. 
-        return fetchedCart.addProduct(product,{
+        return fetchedCart.addProduktos(product,{
             through: {quantity: newQuantity}  // Add the product to the cart
         }); // many-to-many relationship
     })
     .then(() => {
-         res.status(201).json({ message: 'Product added to cart successfully' });
+        console.log('Product added to cart successfully')
+         res.status(201).json({ message: 'Product added to cart successfully (postCART)' });
     })
     .catch((err) => {
         console.log(err)
