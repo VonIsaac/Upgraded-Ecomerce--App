@@ -186,6 +186,30 @@ async function getCart(getCartData){
     }
 }
 
+// handle to delete the prduts from the cart
+async function deleteCart({productId}){
+    try{
+        const response = await fetch('http://localhost:3000/delete-cart-item', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({productId})
+        })
+
+        if(!response.ok){
+            const error = new Error('An error occurred while fetching the event');
+            error.code = response.status;
+            error.info = await response.json();
+            throw error;
+        }
+        return response.json()
+
+    }catch(err){
+        console.log(err)
+    }
+}
+
 export{
     postProducts, 
     getAllProducts, 
@@ -194,5 +218,6 @@ export{
     getEditProducts,
     editProducts,
     postCart,
-    getCart
+    getCart,
+    deleteCart
 } 

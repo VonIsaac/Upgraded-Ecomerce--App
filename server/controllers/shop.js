@@ -148,3 +148,35 @@ exports.postCart = (req, res) => {
     });
 
 }
+
+//delete product from the cart
+exports.deleteCartItem = (req, res) => {
+    const {productId} = req.body; // Accessing data from the body
+    req.user.getCart() // one to one relationship
+    .then((cart) => {
+        //check if wee not have a cart
+        if(!cart){
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        // return the cart with the getProduktos to combinme products and cart
+        return cart.getProduktos({where: {id: productId}}) // Get the product in the cart, many-to-many relationship
+       
+    })
+    .then(produktos => {
+        // create a variable then stored the first element of an array of products
+        const produkto = produktos[0]
+        
+        // then  acces the cartItem in the in between tabele and then delete the product using destroy()
+        produkto.cartItem.destroy() // Delete the product from the cart
+    })
+    .then(() => {
+        console.log('Product deleted from cart successfully');
+        res.status(200).json({ message: 'Product deleted from cart successfully' });
+    })
+    .catch((err) => {
+        console.error('Error fetching cart:', err);
+        res.status(500).json({ message: 'Failed to delete cart', error: err });
+      });
+
+}

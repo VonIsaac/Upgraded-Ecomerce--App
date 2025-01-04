@@ -25,10 +25,10 @@ const Detail = () => {
     if(data){
         content = (
             <div className=" flex justify-center items-center flex-col">
-                <img src={data.imageUrl} alt={data.title} className=" w-[250px]"/>
-                <h1>{data.title}</h1>
-                <p>₱{data.price}</p>
-                <p>{data.description}</p>
+                <img src={data.product.imageUrl} alt={data.product.title} className=" w-[250px]"/>
+                <h1>{data.product.title}</h1>
+                <p>₱{data.product.price}</p>
+                <p>{data.product.description}</p>
             </div>
         )
     }

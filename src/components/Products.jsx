@@ -2,14 +2,15 @@
 import Header from "./UI/Header";
 import { dummyProducts } from "../utils/products";
 import Modal from "./UI/Modal";
-import { Outlet, Link, useNavigate  } from "react-router-dom";
+import { Outlet, useNavigate, Link  } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import Loading from "./UI/Loading";
 import { getAllProducts, postCart, queryClient } from "../utils/https";
 import ErrorBlock from "./UI/Error";
 import Footer from "./UI/Footer";
-
-
+import ProductDetails from "./ProductDetails";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Products = () => {
 
@@ -21,6 +22,15 @@ const Products = () => {
     onSuccess: () => {
       //upon succes navigate to the cart page
       navigate('/cart');
+      toast.success('Product added to cart', {
+        position: 'top-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }),
       queryClient.invalidateQueries({
         queryKey: ['post-cart'],
       });                                     
@@ -54,36 +64,32 @@ const handleAddToCart = (productId) => {
     content = <ErrorBlock  title="An error occurred" message= 'Failed to fetch events' />
   }
 
+    
   if(data){
     content = (
-      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+      <ul className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 ">
         {data.map((product) => (
-          <li key={product.id} className="card bg-base-100 w-96 shadow-xl ">
-            <figure>
-              <img
-                src={product.imageUrl}
-                alt={product.title}
-              />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title uppercase text-2xl tracking-wide font-extrabold">{product.title}</h2>
-              <p className="tracking-wide">₱{product.price}</p>
-              <div className="card-actions justify-end">
-                <button className="btn btn-primary" onClick={() => handleAddToCart(product.id)}>
-                  {postCartPending ? 'Adding to cart...' : 'Add to cart'}
-                </button>
-                <Link to={`/products/${product.id}`} className="btn btn-neutral" onClick={()=>document.getElementById('my_modal_2').showModal()}>
-                  Details
-                </Link>
-              </div>
-            </div>
-          </li>
+          <ProductDetails 
+            key={product.id} 
+            product={product} 
+            onClick={() => handleAddToCart(product.id)} 
+            pending={postCartPending}
+            >
+              <Link 
+                to={`/products/${product.id}`}
+                className="btn btn-primary" 
+                onClick={()=>document.getElementById('my_modal_2').showModal()}>
+                Deatails
+              </Link>
+              <ToastContainer />
+          </ProductDetails>
         ))}
       </ul>
     );
   }
 
   const modal = <Modal />
+
     return(
       <>
       
@@ -133,6 +139,7 @@ const handleAddToCart = (productId) => {
                   {/* this line display the data that wee add */}
                   <div className=" m-10 mb-16">  
                     {content}
+                    
                   </div>
             </section>
             
