@@ -7,6 +7,7 @@ import Admin from './components/Admin';
 import Detail from './components/Detail';
 import EditModal from './components/UI/EditModal';
 import Cart from './components/Cart';
+import Orders from './components/Orders';
 import './App.css'
 //import Modal from './components/UI/Modal';
 
@@ -49,6 +50,11 @@ function App() {
       path: '/cart',
       element: <Cart />,
 
+    },
+
+    {
+      path: '/orders',
+      element: <Orders />
     }
 
   ])

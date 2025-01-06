@@ -76,7 +76,7 @@
                   {data.map((product) => (
                     <tr key={product.id}>
                       <td>{product.title}</td>
-                      <td>{product.price}</td>
+                      <td>₱{product.price}</td>
                       <td>{product.description}</td>
                       <td>{formatDate(product.createdAt)}</td>
                       {errorDeletion && <p className="text-red-500">Failed to add product. Please try again.</p> }

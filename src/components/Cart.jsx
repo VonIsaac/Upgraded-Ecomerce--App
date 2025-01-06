@@ -5,6 +5,7 @@ import Footer from "./UI/Footer";
 import { useQuery, useMutation} from "@tanstack/react-query";
 import { getCart, deleteCart, queryClient } from "../utils/https";
 import CartItems from "./CartItems";
+import CheckoutModal from "./UI/CheckoutModal";
 const Cart = () => {
     
 
@@ -62,7 +63,10 @@ const Cart = () => {
                     <h1 className=" text-5xl mb-5 font-extrabold tracking-wider">
                         Cart&apos;s
                     </h1>
-                    <button className="btn btn-outline btn-primary">Checkout</button>
+                    <button className="btn btn-outline btn-primary" onClick={()=>document.getElementById('my_modal_1').showModal()}>
+                        Checkout
+                    </button>
+                    <CheckoutModal />
                 </div>
                 {content}
             </div>

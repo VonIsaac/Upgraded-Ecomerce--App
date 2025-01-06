@@ -1,6 +1,8 @@
 
 
+const { or } = require('sequelize');
 const Product = require('../models/product');
+const { message } = require('antd');
  
 // get all products
 exports.getProducts = (req, res, next) => {
@@ -179,4 +181,66 @@ exports.deleteCartItem = (req, res) => {
         res.status(500).json({ message: 'Failed to delete cart', error: err });
       });
 
+}
+
+// post order
+exports.postOrder = (req, res) => {
+    let fetchedCart;
+    req.user.getCart() // one to one relationship
+    .then((cart) => {
+        // wee use fetchedCart here to use in the next .then()
+        fetchedCart = cart; 
+        return cart.getProduktos() //many to many relationship
+
+    })
+    .then((produkto) => {
+        // wee access the .user because wee need to get the user data and then pass it to the order
+        return req.user.createOrder() // many to one relationship
+        .then(order => {
+            return order.addProduktos( produkto.map(products  => {
+                // pass the orderItem to connect the product and the order
+                products.orderItem = { quantity: products.cartItem.quantity} // then acces the cartItem and get the quantity to from the CartItem model
+                
+                return products
+             }) ) // many to many relationship
+        })
+        .catch((err) => {
+            console.error('Error creating order:', err);
+            res.status(500).json({ message: 'Failed to create order', error: err });
+          });
+
+    })
+    .then(() => {
+        // wee return fetchedCart to set the product to null, to cleart the cart
+       return fetchedCart.setProduktos(null) // many to many relationship
+    })
+    .then(result => {
+        console.log('Order created successfully:', result);
+        res.status(201).json({ message: 'Order created successfully' });
+    })
+    .catch((err) => {
+        console.error('Error failed post:', err);
+        res.status(500).json({ message: 'Failed to checkout', error: err });
+      });   
+}
+
+// getting data from the order
+exports.getOrders = (req, res) => {
+    // use include to include products per order
+    //req.user.getOders({include: ["produktos" /* this produktos refere to many to many rs in ass */]} ) // one to many relationship
+    req.user.getOrders({
+        include: [{ model: Product, as: 'produktos' }]
+    })
+    .then((orders) => {
+       
+        console.log(orders)
+         res.status(201).json({
+            message: 'Order Succesfully Fetch!',
+            order: orders
+        })
+    })
+    .catch((err) => {
+        console.error('Error fetching orders:', err);
+        res.status(500).json({ message: 'Failed to fetch orders', error: err });
+      })
 }

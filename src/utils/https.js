@@ -210,6 +210,52 @@ async function deleteCart({productId}){
     }
 }
 
+
+// to post the orders 
+async function postOrder(data) {
+    try{
+        const response = await fetch('http://localhost:3000/post-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({data})
+        })
+
+        if(!response.ok){
+            const error = new Error('An error occurred while fetching the event');
+            error.code = response.status;
+            error.info = await response.json();
+            throw error;
+        }
+
+        return await response.json();
+    }catch(err){
+        console.log(err)
+    }
+}
+
+// getting the order data 
+async function getOrder(){
+    try{
+        const response = await fetch('http://localhost:3000/get-orders');
+        if(!response.ok){
+            const error = new Error('An error occurred while fetching the event');
+            error.code = response.status;
+            error.info = await response.json();
+            throw error;
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
+
 export{
     postProducts, 
     getAllProducts, 
@@ -219,5 +265,7 @@ export{
     editProducts,
     postCart,
     getCart,
-    deleteCart
+    deleteCart,
+    postOrder,
+    getOrder
 } 

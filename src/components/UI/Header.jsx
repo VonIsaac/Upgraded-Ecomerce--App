@@ -24,7 +24,7 @@ const Header = () => {
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <Link to={'/cart'}><a>Cart</a></Link>
-                    <li><a>Order&apos;s</a></li>
+                    <Link to={'/orders'}><a>Order&apos;s</a></Link>
                     <Link to={'/admin'}><a>Admin</a></Link>
                 </ul>
                 </div>

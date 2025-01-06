@@ -9,6 +9,8 @@ const Product = require('./models/product');
 const User = require('./models/users');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 // Call the routes
 const errorController = require('./controllers/error');
@@ -49,15 +51,6 @@ app.use(express.json()); // Parses incoming JSON requests
 app.use(express.urlencoded({ extended: false })); // Parses form-urlencoded requests
 
 
-
-
-//app.use(express.static(path.join(__dirname, 'public')));
- // Handle React routing, return all requests to React's index.html
-/*app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-});*/
-
-
 // use the routes 
 app.use(adminRoutes)
 app.use(shopRoutes)
@@ -70,8 +63,11 @@ User.hasMany(Product, { constraints: true, onDelete: 'CASCADE', foreignKey: 'use
 Product.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
 User.hasOne(Cart, { foreignKey: 'userId', as: 'cart' }); // one to one
 Cart.belongsTo(User, { foreignKey: 'userId', as: 'user' }); // many to one
-Cart.belongsToMany(Product, { through: CartItem, as: 'produktos' }); // Note the alias 'products'
-Product.belongsToMany(Cart, { through: CartItem, as: 'cart' }); // Alias to ensure relationship awareness
+Cart.belongsToMany(Product, { through: CartItem, as: 'produktos' }); // many to many'
+Product.belongsToMany(Cart, { through: CartItem, as: 'cart' }); // many to many
+Order.belongsTo(User, {  as: 'user' }); // many to one
+User.hasMany(Order, {as: 'orders' }); // one to many
+Order.belongsToMany(Product, { through: OrderItem, as: 'produktos' }); // many to many
 
 sequelize
 //.sync({force: true})
