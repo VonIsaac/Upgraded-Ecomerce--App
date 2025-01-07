@@ -1,6 +1,7 @@
 
-const CartItems = ({carts, onclick, pending}) => {
+const CartItems = ({carts, onclick, pending, children}) => {
     return(
+      <>
         <li className="card bg-base-100 w-96 shadow-xl">
                  <figure className="px-10 pt-10">
                    <img
@@ -17,12 +18,15 @@ const CartItems = ({carts, onclick, pending}) => {
                     <p className="  text-xl tracking-wider font-medium">{carts.description}</p>
                     <p className="  tracking-wider text-lg font-medium">Price:₱{carts.price}</p>
                    <div className="card-actions">
-                   <button className="btn btn-outline btn-error btn-wide" onClick={onclick}>
+                   <button className="btn btn-outline btn-error btn-wide" onClick={()=>document.getElementById('my_modal_5').showModal()}>
                         {pending ? 'Deleting...' : 'Delete'}
                     </button>
                    </div>
                  </div>
                </li>
+               {/*modal... */}
+               {children}
+      </>      
     )
 }
 

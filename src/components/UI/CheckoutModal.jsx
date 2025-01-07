@@ -1,12 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { queryClient, postOrder } from "../../utils/https";
-
+import { useNavigate } from "react-router-dom";
 
 const CheckoutModal = () => {
+    const navigate = useNavigate()
 
     const {mutate, isPending,} = useMutation({
         mutationFn: postOrder,
         onSuccess: () => {
+            navigate('/orders')
             queryClient.invalidateQueries({
                 queryKey: ['post-cart'],
             })
@@ -18,7 +20,6 @@ const CheckoutModal = () => {
 
     const handleCheckout = () => {
         console.log('Checking out all products');
-        
         mutate()
     }
 
@@ -31,14 +32,14 @@ const CheckoutModal = () => {
             <div className="modal-action">
             <form method="dialog" >
                 {/* if there is a button in form, it will close the modal */}
-              
-            </form>
-            <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                     <button className="btn " onClick={handleCheckout}>
                         {isPending ? 'Checking out...' : 'Checkout'}
                     </button>
                     <button className="btn">Cancel</button>
                 </div>
+            </form>
+            
             </div>
         </div>
     </dialog>
